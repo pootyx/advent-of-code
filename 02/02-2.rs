@@ -11,7 +11,7 @@ fn is_valid_sequence(numbers: &[i32]) -> bool {
     for pair in numbers.windows(2) {
         let diff = pair[0].abs_diff(pair[1]);
         if diff == 0 || diff > 3 {
-            return false;  // Early return if difference is invalid
+            return false;
         }
         
         if pair[0] > pair[1] {
