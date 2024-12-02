@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::collections::HashMap;
 
 fn main() -> io::Result<()> {
     let text_contents = fs::read_to_string("input.txt")?;
@@ -24,17 +25,19 @@ fn main() -> io::Result<()> {
     column2.sort();
 
     let mut similarity = 0;
-    let length = column1.len();
-
-    for i in 0..length {
-        for j in 0..length {
-            if column1[i] == column2[j] {
-                similarity += column1[i];
-            }
+    let mut freq_map: HashMap<i32, i32> = HashMap::new();
+    
+    for &num in &column2 {
+        *freq_map.entry(num).or_insert(0) += 1;
+    }
+    
+    for &num in &column1 {
+        if let Some(&count) = freq_map.get(&num) {
+            similarity += num * count;
         }
     }
-
+    
     println!("{}", similarity);
-
+    
     Ok(())
 }
