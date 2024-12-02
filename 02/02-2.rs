@@ -7,23 +7,22 @@ fn is_valid_sequence(numbers: &[i32]) -> bool {
     }
     let mut is_increasing = true;
     let mut is_decreasing = true;
-    let mut is_diff_safe = true;
+
     for pair in numbers.windows(2) {
+        let diff = pair[0].abs_diff(pair[1]);
+        if diff == 0 || diff > 3 {
+            return false;  // Early return if difference is invalid
+        }
+        
         if pair[0] > pair[1] {
             is_increasing = false;
         }
         if pair[0] < pair[1] {
             is_decreasing = false;
         }
-        if pair[0].abs_diff(pair[1]) > 3 || pair[1].abs_diff(pair[0]) == 0 {  
-            is_diff_safe = false;
-        }
     }
 
-    if is_diff_safe && (is_increasing || is_decreasing) {
-        return true;
-    }
-    return false;
+    is_increasing || is_decreasing
 }
 
 fn is_sequence_safe_with_removal(numbers: &[i32]) -> bool {
