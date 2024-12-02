@@ -20,9 +20,6 @@ fn main() -> io::Result<()> {
             }
         }
     }
-    
-    column1.sort();
-    column2.sort();
 
     let mut similarity = 0;
     let mut freq_map: HashMap<i32, i32> = HashMap::new();
@@ -38,6 +35,6 @@ fn main() -> io::Result<()> {
     }
     
     println!("{}", similarity);
-    
+
     Ok(())
 }
