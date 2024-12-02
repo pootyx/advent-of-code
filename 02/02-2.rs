@@ -1,6 +1,17 @@
 use std::fs;
 use std::io;
 
+fn parse_line(line: &str) -> Vec<i32> {
+    let readings = line.split_whitespace();
+    let mut numbers: Vec<i32> = Vec::new();
+    for reading in readings {
+        if let Ok(number) = reading.parse::<i32>() {
+            numbers.push(number);
+        }
+    }
+    numbers
+}
+
 fn is_valid_sequence(numbers: &[i32]) -> bool {
     if numbers.len() < 2 {
         return false;
@@ -49,13 +60,7 @@ fn main() -> io::Result<()> {
     let mut count = 0;
 
     for line in lines {
-        let readings = line.split_whitespace();
-        let mut numbers: Vec<i32> = Vec::new();
-        for reading in readings {
-            if let Ok(number) = reading.parse::<i32>() {
-                numbers.push(number);
-            }
-        }
+        let numbers = parse_line(line);
         if is_sequence_safe_with_removal(&numbers) {
             count += 1;
         }
