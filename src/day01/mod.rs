@@ -1,9 +1,13 @@
 use std::fs;
 use std::io;
 use std::collections::HashMap;
+use std::path::PathBuf;
 
-fn main() -> io::Result<()> {
-    let text_contents = fs::read_to_string("input.txt")?;
+pub fn run() -> io::Result<()> {
+    println!("Running day 1 solution");
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    path.push("src/day01/input.txt");
+    let text_contents = fs::read_to_string(path)?;
     
     let mut column1: Vec<i32> = Vec::new();
     let mut column2: Vec<i32> = Vec::new();
@@ -31,7 +35,7 @@ fn main() -> io::Result<()> {
         count += (column1[i] - column2[i]).abs();
     }
 
-    println!("{}", count);
+    println!("part 1: {}", count);
 
     let mut similarity = 0;
     let mut freq_map: HashMap<i32, i32> = HashMap::new();
@@ -46,7 +50,7 @@ fn main() -> io::Result<()> {
         }
     }
     
-    println!("{}", similarity);
+    println!("part 2: {}", similarity);
 
     Ok(())
 }

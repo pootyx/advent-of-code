@@ -1,5 +1,2 @@
-# Ignore files without extension
-*
-!/**/
-!*.*
-
+# Added by cargo
+/target

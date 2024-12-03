@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::path::PathBuf;
 
 fn parse_line(line: &str) -> Vec<i32> {
     let readings = line.split_whitespace();
@@ -52,21 +53,29 @@ fn is_sequence_safe_with_removal(numbers: &[i32]) -> bool {
     false
 }
 
-fn main() -> io::Result<()> {
-    let text_contents = fs::read_to_string("input.txt")?;
+pub fn run() -> io::Result<()> {
+    println!("Running day 2 solution");
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    path.push("src/day02/input.txt");
+    let text_contents = fs::read_to_string(path)?;
 
     let lines: Vec<_> = text_contents.lines().collect();
 
-    let mut count = 0;
-
+    let mut part1 = 0;
+    let mut part2 = 0;
     for line in lines {
         let numbers = parse_line(line);
+
+        if is_valid_sequence(&numbers) {
+            part1 += 1;
+        }
         if is_sequence_safe_with_removal(&numbers) {
-            count += 1;
+            part2 += 1;
         }
     }
 
-    println!("Count: {}", count);
+    println!("Part 1: {}", part1);
+    println!("Part 2: {}", part2);
 
     
     Ok(())
