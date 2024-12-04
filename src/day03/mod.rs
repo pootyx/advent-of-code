@@ -3,17 +3,33 @@ use std::io;
 use regex::Regex;
 use std::path::PathBuf;
 
-fn find_all_multiplications(text: &str) -> Vec<(i32, i32)> {
-    let re = Regex::new(r"mul\((-?\d+),(-?\d+)\)").unwrap();
-    let mut results = Vec::new();
+fn find_all_multiplications(text: &str) -> i32 {
+    let re = Regex::new(r"(do\(\)|don't\(\)|mul\((\d+),(\d+)\))").unwrap();
+    let mut sum = 0;
+    let mut dont_encountered = false;
     
     for captures in re.captures_iter(text) {
-        let num1 = captures[1].parse::<i32>().unwrap();
-        let num2 = captures[2].parse::<i32>().unwrap();
-        results.push((num1, num2));
+        let full_match = &captures[1];
+        
+        match full_match {
+            "do()" => {
+                dont_encountered = false;
+                continue;
+            },
+            "don't()" => {
+                dont_encountered = true;
+                continue;
+            },
+            _ if !dont_encountered => {
+                let num1: i32 = captures.get(2).unwrap().as_str().parse().unwrap();
+                let num2: i32 = captures.get(3).unwrap().as_str().parse().unwrap();
+                sum += num1 * num2;
+            },
+            _ => {}
+        }
     }
     
-    results
+    sum
 }
 
 pub fn run() -> io::Result<()> {
@@ -21,16 +37,9 @@ pub fn run() -> io::Result<()> {
     let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     path.push("src/day03/input.txt");
     let text_contents = fs::read_to_string(path)?;
-    let multiplications = find_all_multiplications(&text_contents);
-
-    let mut part1 = 0;
-
-    for (num1, num2) in multiplications {
-        let result = num1 * num2;
-        part1 += result;
-    }
-
-    println!("Part 1: {}", part1);
+    
+    let result = find_all_multiplications(&text_contents);
+    println!("Sum of multiplications: {}", result);
     
     Ok(())
 }
